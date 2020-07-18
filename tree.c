@@ -25,6 +25,7 @@ t_pointer copy(t_pointer bt);
 bool equal(t_pointer bt,t_pointer bt2);
 bool equal_node(item d1,item d2);
 void inorder(t_pointer bt);//중위 순회 함수
+
 int main(){//아 힘들다.
     t_pointer p1=NULL;
     t_pointer p2=NULL;
@@ -75,6 +76,14 @@ int main(){//아 힘들다.
     inorder(copytree);
     printf("\n");
 
+    if(equal(p1,copytree))
+        printf("two tree is absolutely same\n");
+    else
+        printf("two tree is different\n");
+
+    printf("copytree edit\n");
+    copytree->left->left->node='K';
+    inorder(copytree);
     if(equal(p1,copytree))
         printf("two tree is absolutely same\n");
     else
@@ -142,17 +151,18 @@ t_pointer copy(t_pointer bt){
 }
 bool equal(t_pointer bt,t_pointer bt2){
     if(bt && bt2){
-        equal(bt->left);
-        equal_node(bt->node,bt2->node);
-        equal(bt->right);
+        equal(bt->left,bt2->left);
+        +-equal_node(bt->node,bt2->node);
+        equal(bt->right,bt2->right);
      }
     return TRUE;
 }
 bool equal_node(item d1,item d2){
-    if(!strcmp(d1,d2)){
+    if(d1!=d2){
        fprintf(stderr,"tree is not same\n");
-       exit(1);
+       return FALSE;
     }
+    return TRUE;
 }
 void inorder(t_pointer bt){
     if(bt){
