@@ -21,7 +21,10 @@ bool IsEmpty(t_pointer bt);
 t_pointer Lchild(t_pointer bt);
 t_pointer Rchild(t_pointer bt);
 item* Data(t_pointer bt);
-void inorder(t_pointer bt);
+t_pointer copy(t_pointer bt);
+bool equal(t_pointer bt,t_pointer bt2);
+bool equal_node(item d1,item d2);
+void inorder(t_pointer bt);//중위 순회 함수
 int main(){//아 힘들다.
     t_pointer p1=NULL;
     t_pointer p2=NULL;
@@ -33,6 +36,7 @@ int main(){//아 힘들다.
     t_pointer p8=NULL;
     t_pointer p9=NULL;
 
+    t_pointer copytree=NULL;
 
     p1=Create();
     p2=Create();
@@ -63,7 +67,18 @@ int main(){//아 힘들다.
     p4->left=p8;
     p4->right=p9;
 
+    printf("original tree inorder traversal\n");
     inorder(p1);
+    printf("\n");
+    copytree=copy(p1);
+    printf("copy tree inorder traversal\n");
+    inorder(copytree);
+    printf("\n");
+
+    if(equal(p1,copytree))
+        printf("two tree is absolutely same\n");
+    else
+        printf("two tree is different\n");
     return 0;
 }
 
@@ -112,6 +127,31 @@ item* Data(t_pointer bt){   //error 를 null로 주기위해서 자료형을 포
     }
     else{
         return &bt->node;
+    }
+}
+t_pointer copy(t_pointer bt){
+    if(bt){
+        t_pointer temp=NULL;
+        temp=malloc(sizeof(b_tree));
+        temp->left=copy(bt->left);
+        temp->node=bt->node;
+        temp->right=copy(bt->right);
+        return temp;
+    }
+    return NULL;
+}
+bool equal(t_pointer bt,t_pointer bt2){
+    if(bt && bt2){
+        equal(bt->left);
+        equal_node(bt->node,bt2->node);
+        equal(bt->right);
+     }
+    return TRUE;
+}
+bool equal_node(item d1,item d2){
+    if(!strcmp(d1,d2)){
+       fprintf(stderr,"tree is not same\n");
+       exit(1);
     }
 }
 void inorder(t_pointer bt){
