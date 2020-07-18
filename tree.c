@@ -69,10 +69,8 @@ int main(){//아 힘들다.
 
 t_pointer Create(){
     t_pointer p1;
-    b_tree tree1;
 
-    p1=malloc(sizeof(tree1));
-    p1=&tree1;
+    p1=malloc(sizeof(b_tree));
     p1->left=NULL;
     p1->right=NULL;
     return p1;
@@ -119,7 +117,7 @@ item* Data(t_pointer bt){   //error 를 null로 주기위해서 자료형을 포
 void inorder(t_pointer bt){
     if(bt){
         inorder(bt->left);
-        printf("%d ",bt->node);
+        printf("%c ",bt->node);
         inorder(bt->right);
     }
 }
