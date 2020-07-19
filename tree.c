@@ -12,8 +12,8 @@ typedef struct binary_tree{
     t_pointer right;
 }b_tree;
 
-
 typedef enum {FALSE,TRUE} bool;
+typedef enum {DIFFERENT,SAME} checking;
 
 t_pointer Create();
 t_pointer MakeBT(t_pointer bt1,item data,t_pointer bt2);
@@ -22,8 +22,8 @@ t_pointer Lchild(t_pointer bt);
 t_pointer Rchild(t_pointer bt);
 item* Data(t_pointer bt);
 t_pointer copy(t_pointer bt);
-bool equal(t_pointer bt,t_pointer bt2);
-bool equal_node(item d1,item d2);
+int equal(t_pointer bt,t_pointer bt2,int* checknum);
+int equal_node(item d1,item d2,int* checknum);
 void inorder(t_pointer bt);//중위 순회 함수
 
 int main(){//아 힘들다.
@@ -36,8 +36,9 @@ int main(){//아 힘들다.
     t_pointer p7=NULL;
     t_pointer p8=NULL;
     t_pointer p9=NULL;
-
     t_pointer copytree=NULL;
+
+    int check=SAME;
 
     p1=Create();
     p2=Create();
@@ -71,12 +72,14 @@ int main(){//아 힘들다.
     printf("original tree inorder traversal\n");
     inorder(p1);
     printf("\n");
+
     copytree=copy(p1);
+
     printf("copy tree inorder traversal\n");
     inorder(copytree);
     printf("\n");
 
-    if(equal(p1,copytree))
+    if(equal(p1,copytree,&check))//두 트리가 같으면 TRUE 반환 두 트리가 다르면 FALSE 반환
         printf("two tree is absolutely same\n");
     else
         printf("two tree is different\n");
@@ -84,10 +87,12 @@ int main(){//아 힘들다.
     printf("copytree edit\n");
     copytree->left->left->node='K';
     inorder(copytree);
-    if(equal(p1,copytree))
+    if(equal(p1,copytree,&check))
         printf("two tree is absolutely same\n");
-    else
+    else{
+        check=SAME;
         printf("two tree is different\n");
+    }
     return 0;
 }
 
@@ -149,20 +154,24 @@ t_pointer copy(t_pointer bt){
     }
     return NULL;
 }
-bool equal(t_pointer bt,t_pointer bt2){
+int equal(t_pointer bt,t_pointer bt2,int* checknum){
     if(bt && bt2){
-        equal(bt->left,bt2->left);
-        +-equal_node(bt->node,bt2->node);
-        equal(bt->right,bt2->right);
+        equal(bt->left,bt2->left,checknum);
+        equal_node(bt->node,bt2->node,checknum);
+        equal(bt->right,bt2->right,checknum);
      }
-    return TRUE;
+    if(*checknum==SAME)
+        return SAME;
+    else
+        return DIFFERENT;
+
 }
-bool equal_node(item d1,item d2){
+int equal_node(item d1,item d2,int* checknum){
     if(d1!=d2){
-       fprintf(stderr,"tree is not same\n");
-       return FALSE;
+       //fprintf(stderr,"tree is not same\n");
+       *checknum=DIFFERENT;
     }
-    return TRUE;
+    return SAME;
 }
 void inorder(t_pointer bt){
     if(bt){
